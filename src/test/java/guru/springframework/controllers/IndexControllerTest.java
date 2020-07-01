@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,9 +22,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-public class RecipesControllerTest {
+public class IndexControllerTest {
 
-    RecipesController controller;
+    @InjectMocks
+    IndexController controller;
 
     @Mock
     RecipeService recipeService;
@@ -34,16 +36,15 @@ public class RecipesControllerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        this.controller = new RecipesController(this.recipeService);
     }
 
     @Test
     public void testMockMvc() throws Exception {
         final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(this.controller).build();
 
-        mockMvc.perform(get("/recipe"))
+        mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("recipe/index"));
+                .andExpect(view().name("index"));
     }
 
     @Test
@@ -69,7 +70,7 @@ public class RecipesControllerTest {
 
         final String viewName = this.controller.getList(this.model);
 
-        final String expected = "recipe/index";
+        final String expected = "index";
 
         Assert.assertEquals(expected, viewName);
         verify(this.recipeService, times(1)).getAll();
