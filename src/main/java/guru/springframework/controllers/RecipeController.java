@@ -1,5 +1,6 @@
 package guru.springframework.controllers;
 
+import guru.springframework.domain.Recipe;
 import guru.springframework.services.RecipeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,8 @@ public class RecipeController {
     @RequestMapping("/show/{id}")
     public String show(@PathVariable String id, Model model) {
 
-        model.addAttribute("recipe", this.recipeService.getById(Long.valueOf(id)));
+        final Recipe recipe = this.recipeService.getById(Long.valueOf(id));
+        model.addAttribute("recipe", recipe);
 
         return "recipe/show";
 

@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@EqualsAndHashCode(exclude = {"categories", "ingredients"})
+@EqualsAndHashCode(exclude = {"categories", "ingredients", "notes"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
