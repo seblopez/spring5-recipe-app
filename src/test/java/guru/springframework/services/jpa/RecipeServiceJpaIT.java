@@ -149,7 +149,7 @@ public class RecipeServiceJpaIT {
         //then
         assertNotNull(savedRecipeCommand);
         assertNotNull(savedRecipeCommand.getId());
-        log.info(MessageFormat.format("Recipe id {0}", savedRecipeCommand.getId()));
+        log.debug(MessageFormat.format("Recipe id {0}", savedRecipeCommand.getId()));
         assertEquals(testRecipe.getCategories().size(), savedRecipeCommand.getCategories().size());
         assertEquals(testRecipe.getIngredients().size(), savedRecipeCommand.getIngredients().size());
 

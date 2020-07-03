@@ -59,6 +59,12 @@ public class RecipeServiceJpa implements RecipeService {
 
     }
 
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        this.recipeRepository.deleteById(id);
+    }
+
     private Supplier<RuntimeException> getRuntimeExceptionSupplier(Long id) {
         return () -> {
             final String message = MessageFormat.format("Recipe id {0} not found", id);

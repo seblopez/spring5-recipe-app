@@ -35,24 +35,29 @@
                                     <tr>
                                         <th>Name</th>
                                         <th>Update</th>
+                                        <th>Delete</th>
                                     </tr>
                                 </thead>
                                 <tr th:remove="all">
                                     <td><a href="#"/>BBQ Chicken Pizza</td>
                                     <td><a href="#">Update</a></td>
+                                    <td><a href="#">Delete</a></td>
                                 </tr>
                                 <tr th:remove="all">
                                     <td><a href="#"/>Lasagna</td>
                                     <td><a href="#">Update</a></td>
+                                    <td><a href="#">Delete</a></td>
                                 </tr>
                                 <tr th:remove="all">
                                     <td><a href="#"/>Chop Suey</td>
                                     <td><a href="#">Update</a></td>
+                                    <td><a href="#">Delete</a></td>
                                 </tr>
                                 <tr th:each="recipe : ${recipes}">
                                     <!-- /*@thymesVar id="recipe" type="guru.springframework.domain.Recipe" */ -->
-                                    <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/show' }" th:text="${recipe.description}">View</a></td>
-                                    <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/update' }">Update</a></td>
+                                    <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/show'}" th:text="${recipe.description}">View</a></td>
+                                    <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/update'}">Update</a></td>
+                                    <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/delete'}">Delete</a></td>
                                 </tr>
                             </table>
                         </div>
