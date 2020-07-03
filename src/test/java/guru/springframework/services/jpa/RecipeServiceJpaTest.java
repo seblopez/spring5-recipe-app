@@ -1,5 +1,8 @@
 package guru.springframework.services.jpa;
 
+import guru.springframework.commands.RecipeCommand;
+import guru.springframework.converters.RecipeCommandToRecipe;
+import guru.springframework.converters.RecipeToRecipeCommand;
 import guru.springframework.domain.Recipe;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.services.RecipeService;
@@ -15,6 +18,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 public class RecipeServiceJpaTest {
@@ -24,21 +28,27 @@ public class RecipeServiceJpaTest {
     @Mock
     RecipeRepository recipeRepository;
 
+    @Mock
+    RecipeToRecipeCommand recipeToRecipeCommand;
+
+    @Mock
+    RecipeCommandToRecipe recipeCommandToRecipe;
+
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        this.recipeService = new RecipeServiceJpa(this.recipeRepository);
+        this.recipeService = new RecipeServiceJpa(this.recipeRepository, this.recipeCommandToRecipe, this.recipeToRecipeCommand);
     }
 
     @Test
     public void getAll() {
 
         Recipe recipe = Recipe.builder()
-                .id(2l)
+                .id(2L)
                 .description("Ñoquis")
                 .build();
 
@@ -58,13 +68,13 @@ public class RecipeServiceJpaTest {
     public void getByIdReturnsOk() {
 
         Recipe recipe = Recipe.builder()
-                .id(2l)
+                .id(2L)
                 .description("Ñoquis")
                 .build();
 
         when(this.recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
 
-        final Recipe recipeFound = this.recipeService.getById(2l);
+        final Recipe recipeFound = this.recipeService.getById(2L);
 
         assertEquals(recipe, recipeFound);
         verify(this.recipeRepository).findById(anyLong());
@@ -80,8 +90,41 @@ public class RecipeServiceJpaTest {
         exception.expect(RuntimeException.class);
         exception.expectMessage("Recipe id 2 not found");
 
-        this.recipeService.getById(2l);
+        this.recipeService.getById(2L);
 
     }
 
+    @Test
+    public void saveRecipeCommand() {
+
+        final Long id = 345L;
+        final String description = "Mock Recipe";
+
+        RecipeCommand recipeCommand = RecipeCommand.builder()
+                .description(description)
+                .build();
+
+        Recipe recipe = Recipe.builder()
+                .id(id)
+                .description(description).build();
+
+        RecipeCommand savedRecipeCommandMock = RecipeCommand.builder()
+                .id(id)
+                .description(description)
+                .build();
+
+        when(this.recipeCommandToRecipe.convert(recipeCommand)).thenReturn(recipe);
+        when(this.recipeRepository.save(any(Recipe.class))).thenReturn(recipe);
+        when(this.recipeToRecipeCommand.convert(recipe)).thenReturn(savedRecipeCommandMock);
+
+        final RecipeCommand savedRecipeCommand = this.recipeService.saveRecipeCommand(recipeCommand);
+
+        assertNotNull(savedRecipeCommand);
+        assertEquals(recipe.getId(), savedRecipeCommand.getId());
+        assertEquals(recipe.getDescription(), savedRecipeCommand.getDescription());
+        verify(this.recipeCommandToRecipe).convert(any(RecipeCommand.class));
+        verify(this.recipeRepository).save(any(Recipe.class));
+        verify(this.recipeToRecipeCommand).convert(any(Recipe.class));
+
+    }
 }
