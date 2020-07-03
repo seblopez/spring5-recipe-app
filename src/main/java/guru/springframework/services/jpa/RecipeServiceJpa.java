@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 
 @Service
 @Slf4j
@@ -33,11 +34,7 @@ public class RecipeServiceJpa implements RecipeService {
 
     @Override
     public Recipe getById(Long id) {
-        final Recipe recipe = this.recipeRepository.findById(id).orElseThrow(() -> {
-            final String message = MessageFormat.format("Recipe id {0} not found", id);
-            log.debug(message);
-            return new RuntimeException(message);
-        });
+        final Recipe recipe = this.recipeRepository.findById(id).orElseThrow(getRuntimeExceptionSupplier(id));
 
         return recipe;
 
@@ -52,6 +49,22 @@ public class RecipeServiceJpa implements RecipeService {
         log.debug(MessageFormat.format("Saved recipe Id {0}", savedRecipe.getId()));
 
         return this.recipeToRecipeCommand.convert(savedRecipe);
+    }
+
+    @Override
+    @Transactional
+    public RecipeCommand getCommandById(Long id) {
+        final RecipeCommand recipeCommand = this.recipeToRecipeCommand.convert(getById(id));
+        return recipeCommand;
+
+    }
+
+    private Supplier<RuntimeException> getRuntimeExceptionSupplier(Long id) {
+        return () -> {
+            final String message = MessageFormat.format("Recipe id {0} not found", id);
+            log.debug(message);
+            return new RuntimeException(message);
+        };
     }
 
 }

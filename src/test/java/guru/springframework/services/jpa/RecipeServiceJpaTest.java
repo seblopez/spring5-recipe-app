@@ -127,4 +127,43 @@ public class RecipeServiceJpaTest {
         verify(this.recipeToRecipeCommand).convert(any(Recipe.class));
 
     }
+
+    @Test
+    public void getCommandByIdOk() {
+        final Long id = 2L;
+        final String description = "Ñoquis";
+
+        Recipe recipe = Recipe.builder()
+                .id(id)
+                .description(description)
+                .build();
+
+        RecipeCommand recipeCommand = RecipeCommand.builder()
+                .id(id)
+                .description(description)
+                .build();
+
+        when(this.recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+
+        when(this.recipeToRecipeCommand.convert(any(Recipe.class))).thenReturn(recipeCommand);
+
+        final RecipeCommand recipeCommandFound = this.recipeService.getCommandById(id);
+
+        assertEquals(recipeCommand, recipeCommandFound);
+        verify(this.recipeRepository).findById(anyLong());
+        verify(this.recipeRepository, never()).findAll();
+        verify(this.recipeToRecipeCommand).convert(any(Recipe.class));
+    }
+
+    @Test
+    public void getCommandByIdReturnsRuntimeException() {
+
+        when(this.recipeRepository.findById(anyLong())).thenReturn(Optional.empty());
+        exception.expect(RuntimeException.class);
+        exception.expectMessage("Recipe id 2 not found");
+
+        this.recipeService.getCommandById(2L);
+
+    }
+
 }
