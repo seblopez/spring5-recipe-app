@@ -81,7 +81,7 @@
                         </div>
                         <div class="col-md-3">
                             <!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
-                            <a href="#" th:href="@{${recipe.url}}">Check it here!</a>
+                            <a href="#" th:href="@{${recipe.url}}" th:text="${recipe.description}">Check it here!</a>
                         </div>
                     </div>
                 </div>

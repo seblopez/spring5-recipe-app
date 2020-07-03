@@ -105,4 +105,18 @@ public class RecipeControllerTest {
                 .andExpect(view().name("recipe/show"))
                 .andExpect(model().attributeExists("recipe"));
     }
+
+    @Test
+    public void newRecipe() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders
+                .standaloneSetup(this.recipeController)
+                .build();
+
+        mockMvc.perform(get("/recipe/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/new"))
+                .andExpect(model().attributeExists("recipe"));
+
+    }
+
 }
