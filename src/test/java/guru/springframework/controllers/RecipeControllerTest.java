@@ -114,7 +114,7 @@ public class RecipeControllerTest {
 
         mockMvc.perform(get("/recipe/new"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("recipe/new"))
+                .andExpect(view().name("recipe/recipeform"))
                 .andExpect(model().attributeExists("recipe"));
 
     }
