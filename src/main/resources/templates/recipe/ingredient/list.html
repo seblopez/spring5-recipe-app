@@ -24,7 +24,14 @@
             <div class="col-md-6 col-md-offset-3">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h1 class="panel-title">Ingredients</h1>
+                        <div class="row">
+                            <div class="col-md-11 ">
+                                <h1 class="panel-title">Ingredients</h1>
+                            </div>
+                            <div class="col-md-1">
+                                <a class="btn btn-default" href="#" th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/new'}" role="button">New</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive" th:if="${not #lists.isEmpty(recipe.ingredients)}">
@@ -33,7 +40,6 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Description</th>
-                                    <th>View</th>
                                     <th>Update</th>
                                     <th>Delete</th>
                                 </tr>
@@ -41,14 +47,12 @@
                                 <tr th:remove="all">
                                     <td>123</td>
                                     <td>Tasty Goodnees 1</td>
-                                    <td><a href="#">View</a></td>
                                     <td><a href="#">Update</a></td>
                                     <td><a href="#">Delete</a></td>
                                 </tr>
                                 <tr th:remove="all">
                                     <td>12333</td>
                                     <td>Tasty Goodnees 2</td>
-                                    <td><a href="#">View</a></td>
                                     <td><a href="#">Update</a></td>
                                     <td><a href="#">Delete</a></td>
                                 </tr>

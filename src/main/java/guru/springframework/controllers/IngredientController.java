@@ -1,6 +1,8 @@
 package guru.springframework.controllers;
 
 import guru.springframework.commands.IngredientCommand;
+import guru.springframework.commands.RecipeCommand;
+import guru.springframework.commands.UnitOfMeasureCommand;
 import guru.springframework.services.IngredientService;
 import guru.springframework.services.RecipeService;
 import guru.springframework.services.UnitOfMeasureService;
@@ -41,6 +43,23 @@ public class IngredientController {
         model.addAttribute("ingredient", ingredientCommand);
 
         return "recipe/ingredient/show";
+    }
+
+    @GetMapping
+    @RequestMapping("/ingredient/new")
+    public String newIngredient(@PathVariable String recipeId, Model model){
+        RecipeCommand recipeCommand = recipeService.getCommandById(Long.valueOf(recipeId));
+
+        IngredientCommand ingredientCommand = IngredientCommand.builder()
+                .recipeId(Long.valueOf(recipeId))
+                .unitOfMeasure(new UnitOfMeasureCommand())
+                .build();
+
+        model.addAttribute("ingredient", ingredientCommand);
+
+        model.addAttribute("uomList",  unitOfMeasureService.listAllUoms());
+
+        return "recipe/ingredient/ingredientform";
     }
 
     @GetMapping

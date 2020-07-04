@@ -68,7 +68,7 @@ public class RecipeServiceJpa implements RecipeService {
     private Supplier<RuntimeException> getRuntimeExceptionSupplier(Long id) {
         return () -> {
             final String message = MessageFormat.format("Recipe id {0} not found", id);
-            log.debug(message);
+            log.error(message);
             return new RuntimeException(message);
         };
     }

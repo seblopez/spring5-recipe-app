@@ -6,7 +6,8 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(exclude = {"categories", "ingredients", "notes"})
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,7 +38,7 @@ public class Recipe {
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     @Builder.Default
     private Set<Ingredient> ingredients = new HashSet<>();
 

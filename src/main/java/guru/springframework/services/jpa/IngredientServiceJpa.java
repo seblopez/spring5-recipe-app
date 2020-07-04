@@ -90,7 +90,7 @@ public class IngredientServiceJpa implements IngredientService {
                 .filter(ingredient ->
                         ingredient.getDescription().equals(ingredientToSave.getDescription())
                                 && ingredient.getAmount().equals(ingredientToSave.getAmount())
-                                && ingredient.getUnitOfMeasure().equals(ingredientToSave.getUnitOfMeasure()))
+                                && ingredient.getUnitOfMeasure().getId().equals(ingredientToSave.getUnitOfMeasure().getId()))
                 .findFirst()
                 .orElseThrow(() -> {
                     final String errorMessage = MessageFormat.format("Ingredient {} was not properly saved", ingredientToSave.getDescription());

@@ -176,7 +176,76 @@ public class IngredientServiceJpaTest {
     }
 
     @Test
-    public void saveIngredientCommandOk() {
+    public void saveNewIngredientCommandOk() {
+        // given
+        IngredientCommand ingredientCommand = IngredientCommand.builder()
+                .recipeId(345L)
+                .amount(BigDecimal.valueOf(.25))
+                .unitOfMeasure(UnitOfMeasureCommand.builder().id(33L).description("Pound").build())
+                .description("Flour")
+                .build();
+
+        Recipe savedRecipe = Recipe.builder()
+                .id(345L)
+                .description("Pizza dough")
+                .build();
+
+        savedRecipe.addIngredient(Ingredient.builder()
+                .id(873L)
+                .amount(BigDecimal.valueOf(250))
+                .unitOfMeasure(UnitOfMeasure.builder().id(34L).description("Gram").build())
+                .description("Flour")
+                .build());
+
+        savedRecipe.addIngredient(Ingredient.builder()
+                .id(324L)
+                .amount(BigDecimal.ONE)
+                .unitOfMeasure(teaspoon)
+                .description("Salt")
+                .build());
+
+        savedRecipe.addIngredient(Ingredient.builder()
+                .id(340L)
+                .amount(BigDecimal.ONE)
+                .unitOfMeasure(teaspoon)
+                .description("Olive oil")
+                .build());
+
+        savedRecipe.addIngredient(Ingredient.builder()
+                .id(234L)
+                .amount(BigDecimal.ONE)
+                .unitOfMeasure(tablespoon)
+                .description("Dry yeast")
+                .build());
+
+        final Long newIngredientId = 2323L;
+
+        savedRecipe.addIngredient(Ingredient.builder()
+                .id(newIngredientId)
+                .amount(BigDecimal.valueOf(.25))
+                .unitOfMeasure(UnitOfMeasure.builder().id(33L).description("Pound").build())
+                .description("Flour")
+                .build());
+
+        // when
+        when(this.recipeRepository.findById(anyLong())).thenReturn(Optional.of(this.recipe));
+        when(this.recipeRepository.save(any(Recipe.class))).thenReturn(savedRecipe);
+
+        // then
+        final IngredientCommand savedIngredientCommand = this.ingredientService.saveIngredientCommand(ingredientCommand);
+
+        assertNotNull(savedIngredientCommand);
+        assertEquals(newIngredientId, savedIngredientCommand.getId());
+        assertEquals(ingredientCommand.getUnitOfMeasure().getId(), savedIngredientCommand.getUnitOfMeasure().getId());
+        assertEquals(ingredientCommand.getDescription(), savedIngredientCommand.getDescription());
+        assertEquals(ingredientCommand.getRecipeId(), savedIngredientCommand.getRecipeId());
+        verify(recipeRepository).findById(anyLong());
+        verify(recipeRepository).save(any(Recipe.class));
+
+    }
+
+    @Test
+    public void saveExistingIngredientCommandOk() {
         // given
         IngredientCommand ingredientCommand = IngredientCommand.builder()
                 .id(873L)
