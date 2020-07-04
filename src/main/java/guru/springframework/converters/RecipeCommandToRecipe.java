@@ -12,8 +12,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-
 @AllArgsConstructor
 @Component
 public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
@@ -41,8 +39,8 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
                     .prepTime(source.getPrepTime())
                     .cookTime(source.getCookTime())
                     .directions(source.getDirections())
-                    .ingredients(ingredientSetConverter.convert(source.getIngredients(), new HashSet<Ingredient>(), this.ingredientConverter))
-                    .categories(categorySetConverter.convert(source.getCategories(), new HashSet<Category>(), this.categoryConveter))
+                    .ingredients(ingredientSetConverter.convert(source.getIngredients(), this.ingredientConverter))
+                    .categories(categorySetConverter.convert(source.getCategories(), this.categoryConveter))
                     .notes(this.notesConverter.convert(source.getNotes()))
                     .source(source.getSource())
                     .url(source.getUrl())

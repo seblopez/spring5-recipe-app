@@ -62,7 +62,7 @@ public class DataLoader implements CommandLineRunner {
 
         Recipe guacamole = new Recipe();
         guacamole.setDescription("Perfect Guacamole");
-        guacamole.setDirections(String.join("\n", "1 Cut the avocadoGuacamole, remove flesh: Cut the avocados in half. Remove the pit. Score the inside of the avocadoGuacamole with a blunt knife and scoop out the flesh with a spoon. (See How to Cut and Peel an Avocado.) Place in a bowl.", "2 Mash with a fork: Using a fork, roughly mash the avocadoGuacamole. (Don't overdo it! The guacamole should be a little chunky.)", "3 Add saltGuacamole, lime juice, and the rest: Sprinkle with saltGuacamole and lime (or lemon) juice. The acid in the lime juice will provide some balance to the richness of the avocadoGuacamole and will help delay the avocados from turning brown.\n", "Add the chopped onionGuacamole, cilantroGuacamole, black pepper, and chilesGuacamole. Chili peppers vary individually in their hotness. So, start with a half of one chili pepper and add to the guacamole to your desired degree of hotness.\n", "Remember that much of this is done to taste because of the variability in the fresh ingredients. Start with this recipe and adjust to your taste.\n", "Chilling tomatoes hurts their flavor, so if you want to add chopped tomatoGuacamole to your guacamole, add it just before serving.", "4 Serve: Serve immediately, or if making a few hours ahead, place plastic wrap on the surface of the guacamole and press down to cover it and to prevent air reaching it. (The oxygen in the air causes oxidation which will turn the guacamole brown.) Refrigerate until ready to serve."));
+        guacamole.setDirections(String.join("\n", "1 Cut the avocado, remove flesh: Cut the avocados in half. Remove the pit. Score the inside of the avocadoGuacamole with a blunt knife and scoop out the flesh with a spoon. (See How to Cut and Peel an Avocado.) Place in a bowl.", "2 Mash with a fork: Using a fork, roughly mash the avocado. (Don't overdo it! The guacamole should be a little chunky.)", "3 Add salt, lime juice, and the rest: Sprinkle with salt and lime (or lemon) juice. The acid in the lime juice will provide some balance to the richness of the avocado and will help delay the avocados from turning brown.\n", "Add the chopped onion, cilantro, black pepper, and chiles. Chili peppers vary individually in their hotness. So, start with a half of one chili pepper and add to the guacamole to your desired degree of hotness.\n", "Remember that much of this is done to taste because of the variability in the fresh ingredients. Start with this recipe and adjust to your taste.\n", "Chilling tomatoes hurts their flavor, so if you want to add chopped tomato to your guacamole, add it just before serving.", "4 Serve: Serve immediately, or if making a few hours ahead, place plastic wrap on the surface of the guacamole and press down to cover it and to prevent air reaching it. (The oxygen in the air causes oxidation which will turn the guacamole brown.) Refrigerate until ready to serve."));
         guacamole.setServings(4);
         guacamole.setUrl("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
         guacamole.setPrepTime(10);
@@ -116,8 +116,8 @@ public class DataLoader implements CommandLineRunner {
         guacamole.addIngredient(new Ingredient("Avocado", BigDecimal.valueOf(2), unit));
         guacamole.addIngredient(new Ingredient("Salt", BigDecimal.valueOf(.25), teaspoon));
         guacamole.addIngredient(new Ingredient("Fresh lime or lemon juice", BigDecimal.ONE, tablespoon));
-        guacamole.addIngredient(new Ingredient("Minced red onionGuacamole or thinly sliced green onionGuacamole", BigDecimal.valueOf(.25), cup));
-        guacamole.addIngredient(new Ingredient("Serrano chilesGuacamole, stems and seeds removed, minced", BigDecimal.valueOf(2), unit));
+        guacamole.addIngredient(new Ingredient("Minced red onion or thinly sliced green onion", BigDecimal.valueOf(.25), cup));
+        guacamole.addIngredient(new Ingredient("Serrano chiles, stems and seeds removed, minced", BigDecimal.valueOf(2), unit));
         guacamole.addIngredient(new Ingredient("Cilantro (leaves and tender stems), finely chopped", BigDecimal.valueOf(2), tablespoon));
         guacamole.addIngredient(new Ingredient("Freshly grated black pepper", BigDecimal.ONE, dash));
         guacamole.addIngredient(new Ingredient("Freshly grated black pepper", BigDecimal.valueOf(.5), unit));
@@ -128,7 +128,7 @@ public class DataLoader implements CommandLineRunner {
         spicyChickenTacos.setDescription("Spicy Chicken Tacos");
         spicyChickenTacos.setDirections("1 Prepare a gas or charcoal grill for medium-high, direct heat." +
                 "\n" +
-                "2 Make the marinade and coat the chicken: In a large bowl, stir together the chili powder, oregano, cumin, sugar, saltGuacamole, garlic and orange zest. Stir in the orange juice and olive oil to make a loose paste. Add the chicken to the bowl and toss to coat all over.\n" +
+                "2 Make the marinade and coat the chicken: In a large bowl, stir together the chili powder, oregano, cumin, sugar, salt, garlic and orange zest. Stir in the orange juice and olive oil to make a loose paste. Add the chicken to the bowl and toss to coat all over.\n" +
                 "Set aside to marinate while the grill heats and you prepare the rest of the toppings." +
                 "Spicy Grilled Chicken Tacos" +
                 "\n" +
@@ -138,7 +138,7 @@ public class DataLoader implements CommandLineRunner {
                 "\n" +
                 "Wrap warmed tortillas in a tea towel to keep them warm until serving.\n" +
                 "\n" +
-                "5 Assemble the tacos: Slice the chicken into strips. On each tortilla, place a small handful of arugula. Top with chicken slices, sliced avocadoGuacamole, radishes, tomatoes, and onionGuacamole slices. Drizzle with the thinned sour cream. Serve with lime wedges.");
+                "5 Assemble the tacos: Slice the chicken into strips. On each tortilla, place a small handful of arugula. Top with chicken slices, sliced avocado, radishes, tomatoes, and onion slices. Drizzle with the thinned sour cream. Serve with lime wedges.");
         spicyChickenTacos.setServings(4);
         spicyChickenTacos.setUrl("https://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
         spicyChickenTacos.setPrepTime(20);

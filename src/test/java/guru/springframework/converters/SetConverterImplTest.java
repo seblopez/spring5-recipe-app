@@ -22,7 +22,7 @@ public class SetConverterImplTest {
         categories.add(Category.builder().id(345L).description("Italian").build());
         categories.add(Category.builder().id(366L).description("American").build());
 
-        final Set<CategoryCommand> target = converter.convert(categories, new HashSet<>(), new CategoryToCategoryCommand());
+        final Set<CategoryCommand> target = converter.convert(categories, new CategoryToCategoryCommand());
 
         assertNotNull(target);
         assertEquals(3, target.size());
@@ -32,7 +32,7 @@ public class SetConverterImplTest {
     @Test
     public void convertNullOkReturningEmpySet() {
         SetConverter<Category, CategoryCommand> converter = new SetConverterImpl<>();
-        final Set<CategoryCommand> categoryCommands = converter.convert(null, new HashSet<>(), new CategoryToCategoryCommand());
+        final Set<CategoryCommand> categoryCommands = converter.convert(null, new CategoryToCategoryCommand());
         assertNotNull(categoryCommands);
         assertEquals(0, categoryCommands.size());
     }
@@ -40,7 +40,7 @@ public class SetConverterImplTest {
     @Test
     public void convertEmpySetOkReturningEmpySet() {
         SetConverter<Category, CategoryCommand> converter = new SetConverterImpl<>();
-        final Set<CategoryCommand> categoryCommands = converter.convert(null, new HashSet<>(), new CategoryToCategoryCommand());
+        final Set<CategoryCommand> categoryCommands = converter.convert(null, new CategoryToCategoryCommand());
         assertNotNull(categoryCommands);
         assertEquals(0, categoryCommands.size());
     }

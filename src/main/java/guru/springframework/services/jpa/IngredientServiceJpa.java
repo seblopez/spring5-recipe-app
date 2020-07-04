@@ -1,6 +1,7 @@
 package guru.springframework.services.jpa;
 
 import guru.springframework.commands.IngredientCommand;
+import guru.springframework.converters.IngredientCommandToIngredient;
 import guru.springframework.converters.IngredientToIngredientCommand;
 import guru.springframework.domain.Ingredient;
 import guru.springframework.domain.Recipe;
@@ -10,7 +11,11 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.text.MessageFormat;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Supplier;
 
 @Slf4j
 @AllArgsConstructor
@@ -19,6 +24,7 @@ public class IngredientServiceJpa implements IngredientService {
 
     private final RecipeRepository recipeRepository;
     private final IngredientToIngredientCommand ingredientToIngredientCommand;
+    private final IngredientCommandToIngredient ingredientCommandToIngredient;
 
     @Override
     public IngredientCommand findByRecipeIdAndIngredientId(Long recipeId, Long ingredientId) {
@@ -43,4 +49,65 @@ public class IngredientServiceJpa implements IngredientService {
         return this.ingredientToIngredientCommand.convert(ingredient);
 
     }
+
+    @Override
+    @Transactional
+    public IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand) {
+
+        final Long recipeId = ingredientCommand.getRecipeId();
+
+        final Recipe recipe = this.recipeRepository.findById(recipeId)
+                .orElseThrow(getRuntimeExceptionSupplier(recipeId));
+
+        final Ingredient ingredientToSave = this.ingredientCommandToIngredient.convert(ingredientCommand);
+
+        final Set<Ingredient> ingredients = recipe.getIngredients();
+
+        final Long ingredientId = ingredientCommand.getId();
+
+        if(ingredientId != null) {
+            final Optional<Ingredient> optionalIngredient = ingredients
+                    .stream()
+                    .filter(i -> i.getId().equals(ingredientId))
+                    .findFirst();
+
+            if(optionalIngredient.isPresent()) {
+                final Ingredient ingredientInDB = optionalIngredient.get();
+                ingredientInDB.setDescription(ingredientToSave.getDescription());
+                ingredientInDB.setUnitOfMeasure(ingredientToSave.getUnitOfMeasure());
+                ingredientInDB.setAmount(ingredientToSave.getAmount());
+            } else {
+                recipe.addIngredient(ingredientToSave);
+            }
+        } else {
+            recipe.addIngredient(ingredientToSave);
+        }
+
+        final Recipe savedRecipe = this.recipeRepository.save(recipe);
+
+        final Ingredient savedIngredient = savedRecipe.getIngredients()
+                .stream()
+                .filter(ingredient ->
+                        ingredient.getDescription().equals(ingredientToSave.getDescription())
+                                && ingredient.getAmount().equals(ingredientToSave.getAmount())
+                                && ingredient.getUnitOfMeasure().equals(ingredientToSave.getUnitOfMeasure()))
+                .findFirst()
+                .orElseThrow(() -> {
+                    final String errorMessage = MessageFormat.format("Ingredient {} was not properly saved", ingredientToSave.getDescription());
+                    log.error(errorMessage);
+                    return new RuntimeException(errorMessage);
+                });
+
+        return this.ingredientToIngredientCommand.convert(savedIngredient);
+
+    }
+
+    private Supplier<RuntimeException> getRuntimeExceptionSupplier(Long id) {
+        return () -> {
+            final String message = MessageFormat.format("Recipe id {0} not found", id);
+            log.debug(message);
+            return new RuntimeException(message);
+        };
+    }
+
 }

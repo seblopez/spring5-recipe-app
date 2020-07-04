@@ -33,7 +33,7 @@ public class Ingredient {
     private String description;
     private BigDecimal amount;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Recipe recipe;
 
     @OneToOne(fetch = FetchType.EAGER)
