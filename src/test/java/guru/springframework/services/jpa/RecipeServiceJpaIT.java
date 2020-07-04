@@ -61,42 +61,41 @@ public class RecipeServiceJpaIT {
         final Set<Category> categories = new HashSet<>();
         categories.add(category);
 
-        final Set<Ingredient> ingredients = new HashSet<>();
-        ingredients.add(Ingredient.builder()
+        final Ingredient chickenWings = Ingredient.builder()
                 .amount(BigDecimal.valueOf(12))
                 .description("Chicken Wings")
                 .unitOfMeasure(each)
-                .build());
+                .build();
 
-        ingredients.add(Ingredient.builder()
+        final Ingredient flour = Ingredient.builder()
                 .amount(BigDecimal.ONE)
                 .description("Flour")
                 .unitOfMeasure(pound)
-                .build());
+                .build();
 
-        ingredients.add(Ingredient.builder()
+        final Ingredient egg = Ingredient.builder()
                 .amount(BigDecimal.valueOf(3))
                 .description("Egg")
                 .unitOfMeasure(each)
-                .build());
+                .build();
 
-        ingredients.add(Ingredient.builder()
+        final Ingredient chilePoblano = Ingredient.builder()
                 .amount(BigDecimal.ONE)
                 .unitOfMeasure(teaspoon)
                 .description("Chile poblano")
-                .build());
+                .build();
 
-        ingredients.add(Ingredient.builder()
+        final Ingredient salt = Ingredient.builder()
                 .amount(BigDecimal.ONE)
                 .unitOfMeasure(teaspoon)
                 .description("Salt")
-                .build());
+                .build();
 
-        ingredients.add(Ingredient.builder()
+        final Ingredient pepper = Ingredient.builder()
                 .amount(BigDecimal.ONE)
                 .unitOfMeasure(teaspoon)
                 .description("Pepper")
-                .build());
+                .build();
 
         this.initialRecipe = Recipe.builder()
                 .description("Pollos Hermanos")
@@ -104,7 +103,6 @@ public class RecipeServiceJpaIT {
                 .prepTime(30)
                 .cookTime(10)
                 .difficulty(Difficulty.KIND_OF_HARD)
-                .ingredients(ingredients)
                 .directions("Some directions")
                 .source("Some source")
                 .servings(4)
@@ -114,6 +112,13 @@ public class RecipeServiceJpaIT {
                 .url("http://www.polloshermanos.com/")
                 .build();
 
+        this.initialRecipe.addIngredient(pepper);
+        this.initialRecipe.addIngredient(chilePoblano);
+        this.initialRecipe.addIngredient(chickenWings);
+        this.initialRecipe.addIngredient(flour);
+        this.initialRecipe.addIngredient(egg);
+        this.initialRecipe.addIngredient(salt);
+        this.initialRecipe.addIngredient(flour);
 
     }
 

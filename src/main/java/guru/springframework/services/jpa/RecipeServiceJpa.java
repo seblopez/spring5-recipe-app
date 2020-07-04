@@ -16,9 +16,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
 
-@Service
 @Slf4j
 @AllArgsConstructor
+@Service
 public class RecipeServiceJpa implements RecipeService {
 
     private final RecipeRepository recipeRepository;
