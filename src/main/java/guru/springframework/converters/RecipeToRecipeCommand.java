@@ -41,9 +41,10 @@ public class RecipeToRecipeCommand implements Converter<Recipe, RecipeCommand> {
                 .source(source.getSource())
                 .url(source.getUrl())
                 .directions(source.getDirections())
-                .notes(notesConverter.convert(source.getNotes()))
+                .notes(this.notesConverter.convert(source.getNotes()))
                 .categories(categorySetConverter.convert(source.getCategories(), this.categoryConveter))
                 .ingredients(ingredientSetConverter.convert(source.getIngredients(), this.ingredientConverter))
+                .image(source.getImage())
                 .build();
 
         return command;

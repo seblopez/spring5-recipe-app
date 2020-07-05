@@ -70,7 +70,6 @@ public class DataLoader implements CommandLineRunner {
         guacamole.setDifficulty(Difficulty.EASY);
         guacamole.getCategories().add(mexican);
         guacamole.getCategories().add(fastFood);
-        guacamole.setImage(this.imageConverter.convertFromUrl("https://www.hola.com/imagenes/cocina/recetas/20191001150561/guacamole-clasico/0-726-364/guacamole-m.jpg", "jpg"));
 
         final Notes guacamoleNotes = new Notes();
         guacamoleNotes.setRecipe(guacamole);
@@ -145,7 +144,6 @@ public class DataLoader implements CommandLineRunner {
         spicyChickenTacos.setCookTime(15);
         spicyChickenTacos.setDifficulty(Difficulty.MODERATE);
         spicyChickenTacos.getCategories().add(mexican);
-        spicyChickenTacos.setImage(this.imageConverter.convertFromUrl("https://simply-delicious-food.com/wp-content/uploads/2020/04/Crispy-chicken-tacos-4.jpg", "jpg"));
 
         final Notes spicyChickenTacosNotes = new Notes();
         spicyChickenTacosNotes.setRecipeNotes("We have a family motto and it is this: Everything goes better in a tortilla.\n" +
