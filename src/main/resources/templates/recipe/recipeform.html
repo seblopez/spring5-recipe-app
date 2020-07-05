@@ -18,6 +18,7 @@
 </head>
 <body>
     <!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
+    <!--/*@thymesVar id="recipe" type="guru.springframework.domain.Difficulty"*/-->
     <div class="container-fluid" style="margin-top: 20px">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
@@ -65,10 +66,11 @@
                                     </div>
                                     <div class="col-md-3 form-group">
                                         <label>Difficulty:</label>
-                                        <select class="form-control">
-                                            <option>Easy</option>
-                                            <option>Medium</option>
-                                            <option>Hard</option>
+                                        <select class="form-control" th:field="*{difficulty}">
+                                            <option th:each="difficultyValue : ${T(guru.springframework.domain.Difficulty).values()}"
+                                                    th:value="${difficultyValue.name()}"
+                                                    th:text="${difficultyValue.name()}"
+                                            >Easy</option>
                                         </select>
                                     </div>
                                 </div>

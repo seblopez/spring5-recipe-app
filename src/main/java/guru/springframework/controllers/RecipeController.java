@@ -19,8 +19,7 @@ public class RecipeController {
 
     private final RecipeService recipeService;
 
-    @GetMapping
-    @RequestMapping("/{id}/show")
+    @GetMapping("/{id}/show")
     public String show(@PathVariable String id, Model model) {
 
         final Recipe recipe = this.recipeService.getById(Long.valueOf(id));
@@ -30,8 +29,7 @@ public class RecipeController {
 
     }
 
-    @GetMapping
-    @RequestMapping("/new")
+    @GetMapping("/new")
     public String newRecipe(Model model) {
 
         model.addAttribute("recipe", new RecipeCommand());
@@ -40,8 +38,7 @@ public class RecipeController {
 
     }
 
-    @GetMapping
-    @RequestMapping("/{id}/update")
+    @GetMapping("/{id}/update")
     public String updateRecipe(@PathVariable Long id, Model model) {
         model.addAttribute("recipe", this.recipeService.getCommandById(id));
         return "recipe/recipeform";
@@ -50,12 +47,10 @@ public class RecipeController {
     @PostMapping
     public String saveOrUpdate(@ModelAttribute RecipeCommand command) {
         final RecipeCommand savedRecipeCommand = this.recipeService.saveRecipeCommand(command);
-        final String redirect = MessageFormat.format("redirect:/recipe/{0}/show", savedRecipeCommand.getId());
-        return redirect;
+        return MessageFormat.format("redirect:/recipe/{0}/show", savedRecipeCommand.getId());
     }
 
-    @GetMapping
-    @RequestMapping("/{id}/delete")
+    @GetMapping("/{id}/delete")
     public String deleteById(@PathVariable Long id) {
         this.recipeService.deleteById(id);
         log.debug(MessageFormat.format("Deleted recipe with id {0}", id));

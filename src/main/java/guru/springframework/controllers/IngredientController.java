@@ -24,8 +24,7 @@ public class IngredientController {
     private final IngredientService ingredientService;
     private final UnitOfMeasureService unitOfMeasureService;
 
-    @GetMapping
-    @RequestMapping("/ingredients")
+    @GetMapping("/ingredients")
     public String listIngredients(@PathVariable String recipeId, Model model) {
         log.debug(MessageFormat.format("Retrieving ingredients for recipe Id {0}", recipeId));
         model.addAttribute("recipe", this.recipeService.getCommandById(Long.valueOf(recipeId)));
@@ -34,8 +33,7 @@ public class IngredientController {
 
     }
 
-    @GetMapping
-    @RequestMapping("/ingredient/{ingredientId}/show")
+    @GetMapping("/ingredient/{ingredientId}/show")
     public String showIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
 
         final IngredientCommand ingredientCommand = this.ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(ingredientId));
@@ -45,8 +43,7 @@ public class IngredientController {
         return "recipe/ingredient/show";
     }
 
-    @GetMapping
-    @RequestMapping("/ingredient/new")
+    @GetMapping("/ingredient/new")
     public String newIngredient(@PathVariable String recipeId, Model model){
         RecipeCommand recipeCommand = recipeService.getCommandById(Long.valueOf(recipeId));
 
@@ -62,8 +59,7 @@ public class IngredientController {
         return "recipe/ingredient/ingredientform";
     }
 
-    @GetMapping
-    @RequestMapping("/ingredient/{ingredientId}/update")
+    @GetMapping("/ingredient/{ingredientId}/update")
     public String updateRecipeIngredient(@PathVariable String recipeId,
                            @PathVariable String ingredientId, Model model){
         model.addAttribute("ingredient", this.ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(ingredientId)));
@@ -73,8 +69,7 @@ public class IngredientController {
 
     }
 
-    @GetMapping
-    @RequestMapping("/ingredient/{ingredientId}/delete")
+    @GetMapping("/ingredient/{ingredientId}/delete")
     public String deleteById(@PathVariable Long recipeId, @PathVariable Long ingredientId) {
         this.ingredientService.deleteByRecipeIdAndIngredientId(recipeId, ingredientId);
         log.debug(MessageFormat.format("Deleted Ingredient Id {0} from Recipe Id {1}", ingredientId, recipeId));
