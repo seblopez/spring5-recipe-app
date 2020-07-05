@@ -23,12 +23,10 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class IngredientServiceJpaTest {
 
@@ -302,6 +300,97 @@ public class IngredientServiceJpaTest {
         assertEquals(ingredientCommand.getRecipeId(), savedIngredientCommand.getRecipeId());
         verify(recipeRepository).findById(anyLong());
         verify(recipeRepository).save(any(Recipe.class));
+
+    }
+
+    @Test
+    public void deleteByRecipeIdAndIngredientIdOk() {
+        final Long recipeId = this.recipe.getId();
+        final Long ingredientId = 324L;
+
+        Recipe savedRecipe = Recipe.builder()
+                .id(345L)
+                .description("Pizza dough")
+                .build();
+
+        savedRecipe.addIngredient(Ingredient.builder()
+                .id(873L)
+                .amount(BigDecimal.valueOf(1.5))
+                .unitOfMeasure(UnitOfMeasure.builder().id(3676L).description("Cup").build())
+                .description("Flour")
+                .build());
+
+        savedRecipe.addIngredient(Ingredient.builder()
+                .id(340L)
+                .amount(BigDecimal.ONE)
+                .unitOfMeasure(teaspoon)
+                .description("Olive oil")
+                .build());
+
+        savedRecipe.addIngredient(Ingredient.builder()
+                .id(234L)
+                .amount(BigDecimal.ONE)
+                .unitOfMeasure(tablespoon)
+                .description("Dry yeast")
+                .build());
+
+        when(this.recipeRepository.findById(recipeId)).thenReturn(Optional.of(this.recipe));
+        when(this.recipeRepository.save(any(Recipe.class))).thenReturn(savedRecipe);
+
+        this.ingredientService.deleteByRecipeIdAndIngredientId(recipeId, ingredientId);
+
+        assertTrue(savedRecipe.getIngredients()
+                .stream()
+                .filter(ingredient -> ingredient.getId().equals(ingredientId))
+                .findFirst()
+                .isEmpty());
+        verify(this.recipeRepository).findById(anyLong());
+        verify(this.recipeRepository).save(any(Recipe.class));
+
+    }
+
+    @Test
+    public void deleteByRecipeIdAndIngredientIdNotFoundOk() {
+        final Long recipeId = this.recipe.getId();
+        final Long ingredientId = 524L;
+
+        Recipe savedRecipe = Recipe.builder()
+                .id(345L)
+                .description("Pizza dough")
+                .build();
+
+        savedRecipe.addIngredient(Ingredient.builder()
+                .id(873L)
+                .amount(BigDecimal.valueOf(1.5))
+                .unitOfMeasure(UnitOfMeasure.builder().id(3676L).description("Cup").build())
+                .description("Flour")
+                .build());
+
+        savedRecipe.addIngredient(Ingredient.builder()
+                .id(340L)
+                .amount(BigDecimal.ONE)
+                .unitOfMeasure(teaspoon)
+                .description("Olive oil")
+                .build());
+
+        savedRecipe.addIngredient(Ingredient.builder()
+                .id(234L)
+                .amount(BigDecimal.ONE)
+                .unitOfMeasure(tablespoon)
+                .description("Dry yeast")
+                .build());
+
+        when(this.recipeRepository.findById(recipeId)).thenReturn(Optional.of(this.recipe));
+
+        this.ingredientService.deleteByRecipeIdAndIngredientId(recipeId, ingredientId);
+
+        assertTrue(savedRecipe.getIngredients()
+                .stream()
+                .filter(ingredient -> ingredient.getId().equals(ingredientId))
+                .findFirst()
+                .isEmpty());
+        verify(this.recipeRepository).findById(anyLong());
+        verify(this.recipeRepository, never()).save(any(Recipe.class));
 
     }
 }
