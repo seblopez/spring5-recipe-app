@@ -10,8 +10,8 @@ import guru.springframework.services.IngredientService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.text.MessageFormat;
 import java.util.Optional;
 import java.util.Set;
