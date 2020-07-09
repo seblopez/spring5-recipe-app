@@ -24,7 +24,6 @@ public class RecipeController {
 
     @GetMapping("/{id}/show")
     public String show(@PathVariable String id, Model model) {
-
         final Recipe recipe = this.recipeService.getById(Long.valueOf(id));
         model.addAttribute("recipe", recipe);
 
@@ -62,14 +61,29 @@ public class RecipeController {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    public ModelAndView handleNotFound() {
+    public ModelAndView handleNotFound(Exception exception) {
         log.error("Handling not found exception");
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("404error");
+        modelAndView.addObject("exception", exception);
 
         return modelAndView;
 
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NumberFormatException.class)
+    public ModelAndView handleNumberFormat(Exception exception) {
+        log.error("Number format found exception");
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("400error");
+        modelAndView.addObject("exception", exception);
+
+        return modelAndView;
+
+    }
+
 
 }
