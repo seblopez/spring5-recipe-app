@@ -4,6 +4,7 @@ import guru.springframework.commands.RecipeCommand;
 import guru.springframework.converters.RecipeCommandToRecipe;
 import guru.springframework.converters.RecipeToRecipeCommand;
 import guru.springframework.domain.Recipe;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.services.RecipeService;
 import org.junit.Before;
@@ -83,11 +84,11 @@ public class RecipeServiceJpaTest {
     }
 
     @Test
-    public void getByIdReturnsRuntimeException() {
+    public void getByIdReturnsNotFoundException() {
 
         when(this.recipeRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        exception.expect(RuntimeException.class);
+        exception.expect(NotFoundException.class);
         exception.expectMessage("Recipe id 2 not found");
 
         this.recipeService.getById(2L);
@@ -159,7 +160,7 @@ public class RecipeServiceJpaTest {
     public void getCommandByIdReturnsRuntimeException() {
 
         when(this.recipeRepository.findById(anyLong())).thenReturn(Optional.empty());
-        exception.expect(RuntimeException.class);
+        exception.expect(NotFoundException.class);
         exception.expectMessage("Recipe id 2 not found");
 
         this.recipeService.getCommandById(2L);

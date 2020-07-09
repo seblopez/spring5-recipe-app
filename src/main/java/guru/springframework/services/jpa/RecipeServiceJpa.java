@@ -4,6 +4,7 @@ import guru.springframework.commands.RecipeCommand;
 import guru.springframework.converters.RecipeCommandToRecipe;
 import guru.springframework.converters.RecipeToRecipeCommand;
 import guru.springframework.domain.Recipe;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.services.RecipeService;
 import lombok.AllArgsConstructor;
@@ -34,7 +35,7 @@ public class RecipeServiceJpa implements RecipeService {
 
     @Override
     public Recipe getById(Long id) {
-        final Recipe recipe = this.recipeRepository.findById(id).orElseThrow(getRuntimeExceptionSupplier(id));
+        final Recipe recipe = this.recipeRepository.findById(id).orElseThrow(notFound(id));
 
         return recipe;
 
@@ -56,7 +57,6 @@ public class RecipeServiceJpa implements RecipeService {
     public RecipeCommand getCommandById(Long id) {
         final RecipeCommand recipeCommand = this.recipeToRecipeCommand.convert(getById(id));
         return recipeCommand;
-
     }
 
     @Override
@@ -65,11 +65,11 @@ public class RecipeServiceJpa implements RecipeService {
         this.recipeRepository.deleteById(id);
     }
 
-    private Supplier<RuntimeException> getRuntimeExceptionSupplier(Long id) {
+    private Supplier<NotFoundException> notFound(Long id) {
         return () -> {
             final String message = MessageFormat.format("Recipe id {0} not found", id);
             log.error(message);
-            return new RuntimeException(message);
+            return new NotFoundException(message);
         };
     }
 

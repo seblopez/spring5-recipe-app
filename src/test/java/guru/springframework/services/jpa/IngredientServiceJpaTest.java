@@ -9,6 +9,7 @@ import guru.springframework.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import guru.springframework.domain.Ingredient;
 import guru.springframework.domain.Recipe;
 import guru.springframework.domain.UnitOfMeasure;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.services.IngredientService;
 import org.junit.Before;
@@ -132,10 +133,10 @@ public class IngredientServiceJpaTest {
 
 
     @Test
-    public void getByIdReturnsRuntimeExceptionDueToNotExistingRecipe() {
+    public void getByIdReturnsNotFoundExceptionDueToNotExistingRecipe() {
         // when
         when(this.recipeRepository.findById(anyLong())).thenReturn(Optional.empty());
-        exception.expect(RuntimeException.class);
+        exception.expect(NotFoundException.class);
         exception.expectMessage("Recipe Id 232 not found");
 
         // then
@@ -144,7 +145,7 @@ public class IngredientServiceJpaTest {
     }
 
     @Test
-    public void getByIdReturnsRuntimeExceptionDueToNotExistingIngredient() {
+    public void getByIdReturnsNotFoundExceptionDueToNotExistingIngredient() {
         // given
         Set<Ingredient> ingredients = new HashSet<>();
         ingredients.add(Ingredient.builder()
@@ -165,7 +166,7 @@ public class IngredientServiceJpaTest {
 
         // when
         when(this.recipeRepository.findById(anyLong())).thenReturn(recipe);
-        exception.expect(RuntimeException.class);
+        exception.expect(NotFoundException.class);
         exception.expectMessage("Ingredient Id 544 not found");
 
         // then
@@ -382,13 +383,11 @@ public class IngredientServiceJpaTest {
 
         when(this.recipeRepository.findById(recipeId)).thenReturn(Optional.of(this.recipe));
 
+        exception.expect(NotFoundException.class);
+        exception.expectMessage("Ingredient Id 524 for Recipe Id 345 not found");
+
         this.ingredientService.deleteByRecipeIdAndIngredientId(recipeId, ingredientId);
 
-        assertTrue(savedRecipe.getIngredients()
-                .stream()
-                .filter(ingredient -> ingredient.getId().equals(ingredientId))
-                .findFirst()
-                .isEmpty());
         verify(this.recipeRepository).findById(anyLong());
         verify(this.recipeRepository, never()).save(any(Recipe.class));
 

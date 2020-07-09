@@ -5,6 +5,8 @@ import guru.springframework.converters.IngredientCommandToIngredient;
 import guru.springframework.converters.IngredientToIngredientCommand;
 import guru.springframework.domain.Ingredient;
 import guru.springframework.domain.Recipe;
+import guru.springframework.exceptions.NotFoundException;
+import guru.springframework.exceptions.SaveException;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.services.IngredientService;
 import lombok.AllArgsConstructor;
@@ -30,24 +32,24 @@ public class IngredientServiceJpa implements IngredientService {
     public IngredientCommand findByRecipeIdAndIngredientId(Long recipeId, Long ingredientId) {
 
         final Recipe recipe = this.recipeRepository.findById(recipeId)
-                .orElseThrow(() -> {
-                    final String errorMessage = MessageFormat.format("Recipe Id {0} not found", recipeId);
-                    log.error(errorMessage);
-                    return new RuntimeException(errorMessage);
-                });
+                .orElseThrow(notFound("Recipe", recipeId));
 
         final Ingredient ingredient = recipe.getIngredients()
                 .stream()
                 .filter(i -> i.getId().equals(ingredientId))
                 .findFirst()
-                .orElseThrow(() -> {
-                    final String errorMessage = MessageFormat.format("Ingredient Id {0} not found", ingredientId);
-                    log.error(errorMessage);
-                    return new RuntimeException(errorMessage);
-                });
+                .orElseThrow(notFound("Ingredient", ingredientId));
 
         return this.ingredientToIngredientCommand.convert(ingredient);
 
+    }
+
+    private Supplier<NotFoundException> notFound(String field, Long id) {
+        return () -> {
+        final String errorMessage = MessageFormat.format("{0} Id {1} not found", field, id);
+        log.error(errorMessage);
+        return new NotFoundException(errorMessage);
+        };
     }
 
     @Override
@@ -57,7 +59,7 @@ public class IngredientServiceJpa implements IngredientService {
         final Long recipeId = ingredientCommand.getRecipeId();
 
         final Recipe recipe = this.recipeRepository.findById(recipeId)
-                .orElseThrow(getRuntimeExceptionSupplier(recipeId));
+                .orElseThrow(getRuntimeExceptionSupplier("Recipe", recipeId));
 
         final Ingredient ingredientToSave = this.ingredientCommandToIngredient.convert(ingredientCommand);
 
@@ -93,9 +95,9 @@ public class IngredientServiceJpa implements IngredientService {
                                 && ingredient.getUnitOfMeasure().getId().equals(ingredientToSave.getUnitOfMeasure().getId()))
                 .findFirst()
                 .orElseThrow(() -> {
-                    final String errorMessage = MessageFormat.format("Ingredient {} was not properly saved", ingredientToSave.getDescription());
+                    final String errorMessage = MessageFormat.format("Ingredient {0} was not properly saved", ingredientToSave.getDescription());
                     log.error(errorMessage);
-                    return new RuntimeException(errorMessage);
+                    return new SaveException(errorMessage);
                 });
 
         return this.ingredientToIngredientCommand.convert(savedIngredient);
@@ -106,7 +108,7 @@ public class IngredientServiceJpa implements IngredientService {
     @Transactional
     public void deleteByRecipeIdAndIngredientId(Long recipeId, Long ingredientId) {
 
-        final Recipe recipe = this.recipeRepository.findById(recipeId).orElseThrow(getRuntimeExceptionSupplier(recipeId));
+        final Recipe recipe = this.recipeRepository.findById(recipeId).orElseThrow(getRuntimeExceptionSupplier("Recipe", recipeId));
 
         final Optional<Ingredient> optionalIngredient = recipe.getIngredients()
                 .stream()
@@ -118,16 +120,18 @@ public class IngredientServiceJpa implements IngredientService {
             recipe.getIngredients().remove(ingredientToDelete);
             this.recipeRepository.save(recipe);
         } else {
-            log.debug(MessageFormat.format("Ingredient Id {0} for Recipe Id {1} not found ", ingredientId, recipeId));
+            final String errorMessage = MessageFormat.format("Ingredient Id {0} for Recipe Id {1} not found ", ingredientId, recipeId);
+            log.error(errorMessage);
+            throw new NotFoundException(errorMessage);
         }
 
     }
 
-    private Supplier<RuntimeException> getRuntimeExceptionSupplier(Long id) {
+    private Supplier<NotFoundException> getRuntimeExceptionSupplier(String field, Long id) {
         return () -> {
-            final String message = MessageFormat.format("Recipe id {0} not found", id);
+            final String message = MessageFormat.format("{0} id {1} not found", field, id);
             log.debug(message);
-            return new RuntimeException(message);
+            return new NotFoundException(message);
         };
     }
 
