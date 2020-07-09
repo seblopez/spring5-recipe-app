@@ -5,6 +5,7 @@ import guru.springframework.domain.Category;
 import guru.springframework.domain.Ingredient;
 import guru.springframework.domain.Recipe;
 import guru.springframework.domain.UnitOfMeasure;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -163,5 +164,14 @@ public class RecipeControllerTest {
 
         verify(recipeService).deleteById(anyLong());
 
+    }
+
+    @Test
+    public void testRecipeNotFoundExceptionHandling() throws Exception {
+        when(this.recipeService.getById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipe/3/show"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("404error"));
     }
 }
