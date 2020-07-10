@@ -130,16 +130,28 @@ public class RecipeControllerTest {
 
     @Test
     public void testPostNewRecipeForm() throws Exception {
-        RecipeCommand command = new RecipeCommand();
-        command.setId(2L);
+        RecipeCommand command = RecipeCommand.builder()
+                .id(2L)
+                .description("Cabra de Monte")
+                .prepTime(2)
+                .cookTime(30)
+                .servings(4)
+                .directions("Cook it now!")
+                .url("http://www.recipes.com")
+                .source("")
+                .build();
 
-        when(recipeService.saveRecipeCommand(any())).thenReturn(command);
+        when(recipeService.saveRecipeCommand(any(RecipeCommand.class))).thenReturn(command);
 
         mockMvc.perform(post("/recipe")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-//                .param("id", "")
-//                .param("description", "some string")
-        )
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("id", "")
+                .param("description", "Cabra de Monte")
+                .param("prepTime", "2")
+                .param("cookTime", "30")
+                .param("servings", "4")
+                .param("directions", "Cook it now!")
+                .param("url", "http://www.recipes.com"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/2/show"));
     }
