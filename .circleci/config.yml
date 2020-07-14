@@ -23,9 +23,8 @@ jobs:
           key: maven-{{ checksum "/tmp/maven_cache_seed" }}
       - store_test_results:
           path: target/surefire-reports
-      - run:
-          name: Upload to CodeCov
-          command: bash <(curl -s https://codecov.io/bash)
+      - store_artifacts:
+          path: target
 workflows:
   maven_test:
     jobs:
