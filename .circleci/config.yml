@@ -27,6 +27,7 @@ workflows:
   maven_test:
     jobs:
       - maven/test
+      - cobertura:cobertura
   version: 2
 
 # Original config.yml file:
