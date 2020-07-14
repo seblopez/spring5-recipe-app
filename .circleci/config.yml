@@ -1,5 +1,7 @@
 # Orb 'circleci/maven@0.0.12' resolved to 'circleci/maven@0.0.12'
-version: 2
+version: 2.1
+orbs:
+  codecov: codecov/codecov@1.0.2
 jobs:
   maven/test:
     docker:
@@ -23,10 +25,14 @@ jobs:
           key: maven-{{ checksum "/tmp/maven_cache_seed" }}
       - store_test_results:
           path: target/surefire-reports
+  build:
+    steps:
+      - codecov/upload:
+          file: {{ coverage_report_filepath }}
 workflows:
   maven_test:
     jobs:
-      - maven/test cobertura:cobertura
+      - maven/test
   version: 2
 
 # Original config.yml file:
